@@ -9,8 +9,8 @@ import com.example.keskonmange.R
 import com.example.keskonmange.fragment.BarFragment
 
 private val TAB_TITLES = arrayOf(
-    R.string.tab_text_1,
-    R.string.tab_text_2
+    R.string.tab_text_2,
+    R.string.tab_text_1
 )
 
 /**
@@ -24,8 +24,8 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
         when(position) {
-            0 -> return BarFragment()
-            1 -> return MaisonFragment()
+            0 -> return MaisonFragment()
+            1 -> return BarFragment()
             else -> return Fragment()
         }
     }
