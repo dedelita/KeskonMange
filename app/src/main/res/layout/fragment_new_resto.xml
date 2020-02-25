@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+    <Spinner
+        android:id="@+id/spinner_ou"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/resto_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"/>
+
+    <EditText
+        android:id="@+id/resto_name"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="Entrer le nouveau choix"
+        app:layout_constraintBottom_toTopOf="@+id/spinner_type"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_ou" />
+
+    <Spinner
+        android:id="@+id/spinner_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAjout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resto_name"/>
+
+    <Button
+        android:id="@+id/buttonAjout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ajouter" />
+
+
+</LinearLayout>
