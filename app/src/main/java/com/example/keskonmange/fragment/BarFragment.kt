@@ -99,23 +99,31 @@ class BarFragment : Fragment() {
             dialogFragment.setTargetFragment(this, 1)
             dialogFragment.show(ft, "dialog")
         }
+
         fab_resto_choix.setOnClickListener {
             choix = getSeletedResto()
-            if(choix.isEmpty()) {
+            if (choix.isEmpty()) {
                 choix = getRestos("")
                 val listChoix = CopyOnWriteArrayList(choix)
-                for(c: Resto in listChoix) {
-                    if(c.votes == -1)
+                for (c: Resto in listChoix) {
+                    if (c.votes == -1)
                         choix.remove(c)
                 }
             }
-            val resultat = choix[((0 until choix.size).random())].name
-            val builder = AlertDialog.Builder(activity!!)
-            builder.setTitle("On mange")
-            builder.setMessage(resultat)
-            builder.setPositiveButton("OK") { _, _ -> reset_votes() }
-            builder.setNegativeButton("Encore") { _, _ -> fab_resto_choix.performClick() }
-            builder.show()
+            if (choix.isEmpty()) {
+                val builder = AlertDialog.Builder(activity!!)
+                builder.setTitle("Désolé")
+                builder.setMessage("Pas de choix disponible")
+                builder.show()
+            } else {
+                val resultat = choix[((0 until choix.size).random())].name
+                val builder = AlertDialog.Builder(activity!!)
+                builder.setTitle("On mange")
+                builder.setMessage(resultat)
+                builder.setPositiveButton("OK") { _, _ -> reset_votes() }
+                builder.setNegativeButton("Encore") { _, _ -> fab_resto_choix.performClick() }
+                builder.show()
+            }
         }
 
         for (i in 0 until cg_type.childCount) {
@@ -167,7 +175,8 @@ class BarFragment : Fragment() {
     private fun reset_votes() {
         val restos = getRestos(sort)
         for(r in restos) {
-            dbHelper!!.updateRestoBar(r.name!!, r.type!!, 0)
+            dbHelper!!.updateVotesRestoBar(r.name!!, r.type!!, 0)
+            dbHelper!!.updateVettoRestoBar(r.name!!, r.type!!, false)
         }
         rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
     }

@@ -16,6 +16,7 @@ import com.example.keskonmange.main.Resto
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.fragment_resto_list.*
 import kotlinx.android.synthetic.main.fragment_resto_list.view.*
+import java.util.concurrent.CopyOnWriteArrayList
 
 class MaisonFragment : Fragment() {
     private var dbHelper: MyDbHelper? = null
@@ -77,15 +78,28 @@ class MaisonFragment : Fragment() {
         }
         fab_resto_choix.setOnClickListener {
             choix = getSeletedResto()
-            if(choix.isEmpty())
+            if (choix.isEmpty()) {
                 choix = getRestos("")
-            val resultat = choix[((0 until choix.size).random())].name
-            val builder = AlertDialog.Builder(activity!!)
-            builder.setTitle("On mange")
-            builder.setMessage(resultat)
-            builder.setPositiveButton("OK") { _, _ -> reset_votes() }
-            builder.setNegativeButton("Encore") { _, _ -> fab_resto_choix.performClick() }
-            builder.show()
+                val listChoix = CopyOnWriteArrayList(choix)
+                for (c: Resto in listChoix) {
+                    if (c.votes == -1)
+                        choix.remove(c)
+                }
+            }
+            if (choix.isEmpty()) {
+                val builder = AlertDialog.Builder(activity!!)
+                builder.setTitle("Désolé")
+                builder.setMessage("Pas de choix disponible")
+                builder.show()
+            } else {
+                val resultat = choix[((0 until choix.size).random())].name
+                val builder = AlertDialog.Builder(activity!!)
+                builder.setTitle("On mange")
+                builder.setMessage(resultat)
+                builder.setPositiveButton("OK") { _, _ -> reset_votes() }
+                builder.setNegativeButton("Encore") { _, _ -> fab_resto_choix.performClick() }
+                builder.show()
+            }
         }
 
         for (i in 0 until cg_type.childCount) {
@@ -142,7 +156,8 @@ class MaisonFragment : Fragment() {
     private fun reset_votes() {
         val restos = getRestos(sort)
         for(r in restos) {
-            dbHelper!!.updateRestoMaison(r.name!!, r.type!!,0)
+            dbHelper!!.updateVotesRestoMaison(r.name!!, r.type!!,0)
+            dbHelper!!.updateVettoRestoMaison(r.name!!, r.type!!,false)
         }
         rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
     }

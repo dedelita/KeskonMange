@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,7 +74,7 @@ class BarRecyclerViewAdapter(
             var nb = resto.votes!!
             if (nb > 0) {
                 nb -= 1
-                dbHelper!!.updateRestoBar(resto.name!!, resto.type!!, nb)
+                dbHelper!!.updateVotesRestoBar(resto.name!!, resto.type!!, nb)
                 holder.restoVotes.text = Editable.Factory.getInstance().newEditable(nb.toString())
                 resto.votes = nb
                 if (sort == "votes") {
@@ -88,7 +87,7 @@ class BarRecyclerViewAdapter(
         holder.npPlus.setOnClickListener {
             var nb = Integer.parseInt(holder.restoVotes.text.toString())
             nb += 1
-            dbHelper!!.updateRestoBar(resto.name!!, resto.type!!, nb)
+            dbHelper!!.updateVotesRestoBar(resto.name!!, resto.type!!, nb)
             holder.restoVotes.text = Editable.Factory.getInstance().newEditable(nb.toString())
             resto.votes = nb
             if (sort == "votes") {
@@ -99,7 +98,7 @@ class BarRecyclerViewAdapter(
 
         holder.restoVetto.setOnClickListener {
             if (!holder.vetto!!) {
-                dbHelper!!.updateRestoBar(resto.name!!, resto.type!!, -1)
+                dbHelper!!.updateVotesRestoBar(resto.name!!, resto.type!!, -1)
                 dbHelper!!.updateVettoRestoBar(resto.name!!, resto.type!!, true)
                 resto.vetto = true
                 holder.initVetto()
@@ -107,9 +106,9 @@ class BarRecyclerViewAdapter(
                 if (resto.votes == -1) {
                     holder.restoVotes.text = Editable.Factory.getInstance().newEditable("0")
                     resto.votes = 0
-                    dbHelper!!.updateRestoBar(resto.name!!, resto.type!!, 0)
+                    dbHelper!!.updateVotesRestoBar(resto.name!!, resto.type!!, 0)
                 } else {
-                    dbHelper!!.updateRestoBar(resto.name!!, resto.type!!, resto.votes!!)
+                    dbHelper!!.updateVotesRestoBar(resto.name!!, resto.type!!, resto.votes!!)
                 }
                 dbHelper!!.updateVettoRestoBar(resto.name!!, resto.type!!, false)
                 resto.vetto = false

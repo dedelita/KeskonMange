@@ -40,7 +40,6 @@ class MyDbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             onCreate(db)
         }
 
-
         fun addRestoBar(resto: Resto): Boolean {
             val db = this.writableDatabase
             val values = ContentValues()
@@ -91,16 +90,6 @@ class MyDbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             return (Integer.parseInt("$_success") != -1)
         }
 
-    fun getVettoBar(name: String, type: String): Boolean {
-        val db = this.writableDatabase
-        val query = db.rawQuery("SELECT $COLUMN_VETTO FROM $TABLE_NAME_BAR WHERE $COLUMN_NAME =? AND $COLUMN_TYPE =?", arrayOf(name, type))
-        query!!.moveToFirst()
-        if (query.count > 0)
-            return query.getInt(query.getColumnIndex("vetto")) == 1
-        else
-            return false
-    }
-
         fun updateVettoRestoMaison(name: String, type: String, vetto: Boolean): Boolean {
             val db = this.writableDatabase
             val values = ContentValues()
@@ -110,7 +99,7 @@ class MyDbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             return (Integer.parseInt("$_success") != -1)
         }
 
-        fun updateRestoBar(name: String, type: String, votes: Int): Boolean {
+        fun updateVotesRestoBar(name: String, type: String, votes: Int): Boolean {
             val db = this.writableDatabase
             val values = ContentValues()
             values.put(COLUMN_VOTES, votes)
@@ -119,7 +108,7 @@ class MyDbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             return (Integer.parseInt("$_success") != -1)
         }
 
-        fun updateRestoMaison(name: String, type: String, votes: Int): Boolean {
+        fun updateVotesRestoMaison(name: String, type: String, votes: Int): Boolean {
             val db = this.writableDatabase
             val values = ContentValues()
             values.put(COLUMN_VOTES, votes)

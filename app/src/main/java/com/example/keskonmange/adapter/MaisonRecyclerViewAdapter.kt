@@ -76,7 +76,7 @@ class MaisonRecyclerViewAdapter(
             var nb = resto.votes!!
             if (nb > 0) {
                 nb -= 1
-                dbHelper!!.updateRestoMaison(resto.name!!, resto.type!!, nb)
+                dbHelper!!.updateVotesRestoMaison(resto.name!!, resto.type!!, nb)
                 holder.restoVotes.text = Editable.Factory.getInstance().newEditable(nb.toString())
                 if (sort == "votes") {
                     restos = ArrayList(restos.sortedWith(compareByDescending { it.votes }))
@@ -89,7 +89,7 @@ class MaisonRecyclerViewAdapter(
             Log.d("plus", holder.toString())
             var nb = Integer.parseInt(holder.restoVotes.text.toString())
             nb += 1
-            dbHelper!!.updateRestoMaison(resto.name!!, resto.type!!, nb)
+            dbHelper!!.updateVotesRestoMaison(resto.name!!, resto.type!!, nb)
             holder.restoVotes.text = Editable.Factory.getInstance().newEditable(nb.toString())
             if (sort == "votes") {
                 restos = ArrayList(restos.sortedWith(compareByDescending { it.votes }))
@@ -100,7 +100,7 @@ class MaisonRecyclerViewAdapter(
         holder.restoVetto.setOnClickListener {
             if (holder.restoVotes.visibility == View.VISIBLE) {
                 Log.d("vettoYes", holder.toString())
-                dbHelper!!.updateRestoMaison(resto.name!!, resto.type!!, -1)
+                dbHelper!!.updateVotesRestoMaison(resto.name!!, resto.type!!, -1)
                 dbHelper!!.updateVettoRestoMaison(resto.name!!, resto.type!!, true)
                 resto.vetto = true
 
@@ -110,9 +110,9 @@ class MaisonRecyclerViewAdapter(
                 if (resto.votes == -1) {
                     holder.restoVotes.text = Editable.Factory.getInstance().newEditable("0")
                     resto.votes = 0
-                    dbHelper!!.updateRestoMaison(resto.name!!, resto.type!!, 0)
+                    dbHelper!!.updateVotesRestoMaison(resto.name!!, resto.type!!, 0)
                 } else {
-                    dbHelper!!.updateRestoMaison(resto.name!!, resto.type!!, resto.votes!!)
+                    dbHelper!!.updateVotesRestoMaison(resto.name!!, resto.type!!, resto.votes!!)
                 }
                 dbHelper!!.updateVettoRestoMaison(resto.name!!, resto.type!!, false)
                 resto.vetto = false
