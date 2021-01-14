@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_resto_list.view.*
  * specified [OnListFragmentInteractionListener].
  */
 class MaisonRecyclerViewAdapter(
-    private var restos: ArrayList<Resto>, private var sort: String, private val context: Context,
+    private var restos: ArrayList<Resto>, private var sort: String, context: Context,
     private val mListener: MaisonFragment.OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<MaisonRecyclerViewAdapter.ViewHolder>() {
 
