@@ -66,7 +66,8 @@ class BarRecyclerViewAdapter(
 
         holder.restoDelete.setOnClickListener {
             restos.removeAt(position)
-           this.notifyItemRemoved(position)
+            this.notifyItemRemoved(position)
+            this.notifyItemRangeChanged(position, restos.size)
             showUndoSnackbar(rv, resto, position)
         }
 

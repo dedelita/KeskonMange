@@ -68,7 +68,8 @@ class MaisonRecyclerViewAdapter(
         holder.restoDelete.setOnClickListener {
             restos.removeAt(position)
             this.notifyItemRemoved(position)
-            showUndoSnackbar(it.rv_resto, resto, position)
+            this.notifyItemRangeChanged(position, restos.size)
+            showUndoSnackbar(rv, resto, position)
         }
 
         holder.npMoins.setOnClickListener {
