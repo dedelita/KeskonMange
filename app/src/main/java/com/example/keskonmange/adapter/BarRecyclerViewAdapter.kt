@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_resto_list.view.*
 
 /**
  * [RecyclerView.Adapter] that can display a [Resto] and makes a call to the
- * specified [OnListFragmentInteractionListener].
+ * specified [BarFragment.OnListFragmentInteractionListener].
  */
 class BarRecyclerViewAdapter(
     private var restos: ArrayList<Resto>, private var sort: String, context: Context,
