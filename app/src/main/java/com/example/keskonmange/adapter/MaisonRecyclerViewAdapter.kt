@@ -144,13 +144,13 @@ class MaisonRecyclerViewAdapter(
     }
 
     private fun showUndoSnackbar(rv: RecyclerView, resto: Resto, position: Int) {
-        val snackbarUndo = Snackbar.make(rv, "${resto.name} supprimé", Snackbar.LENGTH_LONG)
+        val snackbarUndo = Snackbar.make(rv, "${resto.name} supprimé", Snackbar.LENGTH_SHORT)
 
         snackbarUndo.setActionTextColor(Color.parseColor("#FFFFFF"))
         snackbarUndo.setAction("Annuler") { undoDelete(position, resto) }
         snackbarUndo.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT || event == Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE) {
                     dbHelper!!.deleteRestoMaison(resto.name!!, resto.type!!)
                 }
                 super.onDismissed(transientBottomBar, event)

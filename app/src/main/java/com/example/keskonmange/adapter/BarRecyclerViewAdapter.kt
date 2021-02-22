@@ -146,7 +146,7 @@ class BarRecyclerViewAdapter(
         snackbarUndo.setAction("Annuler") { undoDelete(position, resto) }
         snackbarUndo.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT || event == Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE) {
                     dbHelper!!.deleteRestoBar(resto.name!!, resto.type!!)
                 }
                 super.onDismissed(transientBottomBar, event)
