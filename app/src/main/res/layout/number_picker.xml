@@ -12,17 +12,16 @@
     <ImageButton
         android:src="@drawable/ic_remove_black_16dp"
         android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_height="match_parent"
         style="?android:attr/borderlessButtonStyle"
         android:layout_gravity="center"
-        android:contentDescription="voteMoins" />
+        android:contentDescription="@string/votemoins" />
 
     <EditText
         android:layout_width="32dp"
         android:layout_height="wrap_content"
         android:background="@null"
         android:inputType="number"
-        android:text="0"
         android:textAlignment="center"
         android:importantForAutofill="no"
         tools:ignore="LabelFor"
@@ -34,6 +33,6 @@
         android:layout_height="32dp"
         style="?android:attr/borderlessButtonStyle"
         android:layout_gravity="center"
-        android:contentDescription="votePlus" />
+        android:contentDescription="@string/voteplus" />
 </LinearLayout>
 </merge>

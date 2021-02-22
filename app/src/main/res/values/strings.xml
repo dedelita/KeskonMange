@@ -4,10 +4,9 @@
     <string name="tab_text_2">A la maison</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="votemoins">voteMoins</string>
-    <string name="voteplus">votePlus</string>
-    <string name="supprresto">supprResto</string>
+    <string name="votemoins">Vote Moins</string>
+    <string name="voteplus">Vote Plus</string>
+    <string name="supprresto">Suppression du Resto</string>
     <string name="sort_asc">Par ordre alphabétique</string>
     <string name="sort_desc">Par ordre inverse</string>
     <string name="sort_type">Par type</string>
@@ -18,4 +17,6 @@
     <string name="resto">Resto</string>
     <string name="plat">Plat</string>
     <string name="sort_votes">Par votes</string>
+    <string name="addResto">Ajouter un resto</string>
+    <string name="getResult">Obtenir le résultat</string>
 </resources>
