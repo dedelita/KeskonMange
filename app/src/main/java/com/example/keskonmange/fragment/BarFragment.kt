@@ -29,6 +29,7 @@ class BarFragment : Fragment() {
     private var types = arrayListOf("Resto", "Livraison", "A emporter")
     private var choix = arrayListOf<Resto>()
     private var sort: String = ""
+    private var scale: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,15 +50,17 @@ class BarFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
+            R.id.scale_comfort -> rescale("comfort")
+            R.id.scale_compact -> rescale("compact")
             R.id.action_reset -> reset_votes()
             R.id.sort_asc -> rv_resto.adapter =
-                BarRecyclerViewAdapter(getRestos("asc"), "asc", activity!!, listener)
+                BarRecyclerViewAdapter(getRestos("asc"), "asc", scale, activity!!, listener)
             R.id.sort_desc -> rv_resto.adapter =
-                BarRecyclerViewAdapter(getRestos("desc"), "desc", activity!!, listener)
+                BarRecyclerViewAdapter(getRestos("desc"), "desc", scale, activity!!, listener)
             R.id.sort_type -> rv_resto.adapter =
-                BarRecyclerViewAdapter(getRestos("type"), "type", activity!!, listener)
+                BarRecyclerViewAdapter(getRestos("type"), "type", scale, activity!!, listener)
             R.id.sort_votes -> rv_resto.adapter =
-                BarRecyclerViewAdapter(getRestos("votes"), "votes", activity!!, listener)
+                BarRecyclerViewAdapter(getRestos("votes"), "votes", scale, activity!!, listener)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -65,7 +68,8 @@ class BarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         dbHelper = MyDbHelper(this.context!!, null)
         sort = dbHelper!!.getSort()
-        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
+        scale = dbHelper!!.getScale()
+        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
 
         val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback((ItemTouchHelper.UP or ItemTouchHelper.DOWN), 0) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
@@ -135,7 +139,7 @@ class BarFragment : Fragment() {
                     types.remove(chippy.text.toString())
 
                 rv_resto.adapter =
-                    BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
+                    BarRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
             }
         }
     }
@@ -154,7 +158,7 @@ class BarFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == 1) {
-            rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
+            rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
         }
     }
     /**
@@ -172,13 +176,21 @@ class BarFragment : Fragment() {
         fun onListFragmentInteraction(item: Resto?)
     }
 
+    private fun rescale(scale: String) {
+        if(scale != this.scale) {
+            this.scale = scale
+            dbHelper!!.updateScale(scale)
+        }
+        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
+    }
+
     private fun reset_votes() {
         val restos = getRestos(sort)
         for(r in restos) {
             dbHelper!!.updateVotesRestoBar(r.name!!, r.type!!, 0)
             dbHelper!!.updateVettoRestoBar(r.name!!, r.type!!, false)
         }
-        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
+        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
     }
 
     private fun getResto(cursor: Cursor): Resto {

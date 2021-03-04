@@ -1,9 +1,8 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">KeskonMange</string>
     <string name="tab_text_1">Au bar</string>
     <string name="tab_text_2">A la maison</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="votemoins">Vote Moins</string>
     <string name="voteplus">Vote Plus</string>
     <string name="supprresto">Suppression du Resto</string>
@@ -19,4 +18,7 @@
     <string name="sort_votes">Par votes</string>
     <string name="addResto">Ajouter un resto</string>
     <string name="getResult">Obtenir le résultat</string>
+    <string name="rescale">Format</string>
+    <string name="scale_comfort">Confortable</string>
+    <string name="scale_compact">Compact</string>
 </resources>

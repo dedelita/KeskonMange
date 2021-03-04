@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.keskonmange.R
+import com.example.keskonmange.adapter.BarRecyclerViewAdapter
 import com.example.keskonmange.adapter.MaisonRecyclerViewAdapter
 import com.example.keskonmange.main.MyDbHelper
 import com.example.keskonmange.main.Resto
@@ -24,6 +25,7 @@ class MaisonFragment : Fragment() {
     private var types = arrayListOf("Resto", "Livraison", "A emporter", "Plat")
     private var choix = arrayListOf<Resto>()
     private var sort: String = ""
+    private var scale: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -43,15 +45,17 @@ class MaisonFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
+            R.id.scale_comfort -> rescale("comfort")
+            R.id.scale_compact -> rescale("compact")
             R.id.action_reset -> reset_votes()
             R.id.sort_asc -> rv_resto.adapter =
-                MaisonRecyclerViewAdapter(getRestos("asc"), "asc", activity!!, listener)
+                MaisonRecyclerViewAdapter(getRestos("asc"), "asc", scale, activity!!, listener)
             R.id.sort_desc -> rv_resto.adapter =
-                MaisonRecyclerViewAdapter(getRestos("desc"), "desc", activity!!, listener)
+                MaisonRecyclerViewAdapter(getRestos("desc"), "desc", scale, activity!!, listener)
             R.id.sort_type -> rv_resto.adapter =
-                MaisonRecyclerViewAdapter(getRestos("type"), "type", activity!!, listener)
+                MaisonRecyclerViewAdapter(getRestos("type"), "type", scale, activity!!, listener)
             R.id.sort_votes -> rv_resto.adapter =
-                MaisonRecyclerViewAdapter(getRestos("votes"), "votes", activity!!, listener)
+                MaisonRecyclerViewAdapter(getRestos("votes"), "votes", scale, activity!!, listener)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -59,9 +63,10 @@ class MaisonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         dbHelper = MyDbHelper(this.context!!, null)
         sort = dbHelper!!.getSort()
+        scale = dbHelper!!.getScale()
         cg_type.chipPlat.visibility = View.VISIBLE
 
-        rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
+        rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
 
         fab_add.setOnClickListener { _ ->
             val dialogFragment = NewRestoDialogFragment()
@@ -110,7 +115,7 @@ class MaisonFragment : Fragment() {
                 else
                     types.remove(chippy.text.toString())
 
-                rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
+                rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
             }
         }
 
@@ -149,8 +154,16 @@ class MaisonFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == 1) {
-            rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
+            rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
         }
+    }
+
+    private fun rescale(scale: String) {
+        if(scale != this.scale) {
+            this.scale = scale
+            dbHelper!!.updateScale(scale)
+        }
+        rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
     }
 
     private fun reset_votes() {
@@ -159,7 +172,7 @@ class MaisonFragment : Fragment() {
             dbHelper!!.updateVotesRestoMaison(r.name!!, r.type!!,0)
             dbHelper!!.updateVettoRestoMaison(r.name!!, r.type!!,false)
         }
-        rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
+        rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
     }
 
     private fun getRestos(sort: String): ArrayList<Resto> {

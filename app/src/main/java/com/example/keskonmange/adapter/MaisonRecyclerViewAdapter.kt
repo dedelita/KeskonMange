@@ -27,13 +27,14 @@ import kotlinx.android.synthetic.main.fragment_resto_list.view.*
  * specified [MaisonFragment.OnListFragmentInteractionListener].
  */
 class MaisonRecyclerViewAdapter(
-    private var restos: ArrayList<Resto>, private var sort: String, context: Context,
+    private var restos: ArrayList<Resto>, private var sort: String, private var scale: String, context: Context,
     private val mListener: MaisonFragment.OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<MaisonRecyclerViewAdapter.ViewHolder>() {
 
     private var dbHelper: MyDbHelper? = null
     private val mOnClickListener: View.OnClickListener
     private var rv: RecyclerView = RecyclerView(context)
+    private var layoutRes = R.layout.fragment_resto
 
     init {
         mOnClickListener = View.OnClickListener { v ->
@@ -50,8 +51,10 @@ class MaisonRecyclerViewAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        if(scale == "comfort")
+            layoutRes = R.layout.fragment_resto_comfort
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_resto, parent, false)
+            .inflate(layoutRes, parent, false)
         rv = parent.rv_resto
         return ViewHolder(view)
     }

@@ -11,32 +11,34 @@ class MyDbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
 
         override fun onCreate(db: SQLiteDatabase) {
-            var CREATE_PRODUCTS_TABLE = ("CREATE TABLE $TABLE_NAME_BAR " +
+            var CREATE_TABLE = ("CREATE TABLE $TABLE_NAME_BAR " +
                     "($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                     "$COLUMN_NAME TEXT, $COLUMN_VOTES INTEGER, $COLUMN_POS INTEGER, " +
                     "$COLUMN_VETTO BOOLEAN, $COLUMN_TYPE TEXT)")
-            db.execSQL(CREATE_PRODUCTS_TABLE)
+            db.execSQL(CREATE_TABLE)
 
-            CREATE_PRODUCTS_TABLE = ("CREATE TABLE $TABLE_NAME_MAISON " +
+            CREATE_TABLE = ("CREATE TABLE $TABLE_NAME_MAISON " +
                     "($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                     "$COLUMN_NAME TEXT, " +
                     "$COLUMN_TYPE TEXT, " +
                     "$COLUMN_VOTES INTEGER, " +
                     "$COLUMN_VETTO BOOLEAN, " +
                     "$COLUMN_POS INTEGER)")
-            db.execSQL(CREATE_PRODUCTS_TABLE)
+            db.execSQL(CREATE_TABLE)
 
-            CREATE_PRODUCTS_TABLE = ("CREATE TABLE $TABLE_SORT " +
-                    "($VAL_SORT TEXT)")
-            db.execSQL(CREATE_PRODUCTS_TABLE)
+            CREATE_TABLE = ("CREATE TABLE $TABLE_SETTINGS " +
+                    "($VAL_SORT TEXT, " +
+                    "$VAL_SCALE TEXT)")
+            db.execSQL(CREATE_TABLE)
             val values = ContentValues()
             values.put(VAL_SORT, "")
-            db.insert(TABLE_SORT, null, values)
+            values.put(VAL_SCALE, "comfort")
+            db.insert(TABLE_SETTINGS, null, values)
         }
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
             db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME_MAISON")
             db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME_BAR")
-            db.execSQL("DROP TABLE IF EXISTS $TABLE_SORT")
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_SETTINGS")
             onCreate(db)
         }
 
@@ -152,10 +154,20 @@ class MyDbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         @SuppressLint("Recycle")
         fun getSort(): String {
             val db = this.readableDatabase
-            val query = db.rawQuery("SELECT $VAL_SORT FROM $TABLE_SORT", null)
+            val query = db.rawQuery("SELECT $VAL_SORT FROM $TABLE_SETTINGS", null)
             query!!.moveToFirst()
             if (query.count > 0)
                 return query.getString(query.getColumnIndex("val_sort"))
+            else
+                return query.count.toString()
+        }
+        @SuppressLint("Recycle")
+        fun getScale(): String {
+            val db = this.readableDatabase
+            val query = db.rawQuery("SELECT $VAL_SCALE FROM $TABLE_SETTINGS", null)
+            query!!.moveToFirst()
+            if (query.count > 0)
+                return query.getString(query.getColumnIndex("val_scale"))
             else
                 return query.count.toString()
         }
@@ -164,7 +176,16 @@ class MyDbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(VAL_SORT, sort)
-        val _success = db.update(TABLE_SORT, values, "", null).toLong()
+        val _success = db.update(TABLE_SETTINGS, values, "", null).toLong()
+        db.close()
+        return (Integer.parseInt("$_success") != -1)
+    }
+
+    fun updateScale(scale: String): Boolean {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(VAL_SCALE, scale)
+        val _success = db.update(TABLE_SETTINGS, values, "", null).toLong()
         db.close()
         return (Integer.parseInt("$_success") != -1)
     }
@@ -174,7 +195,7 @@ class MyDbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             private val DATABASE_NAME = "test.db"
             val TABLE_NAME_BAR = "restos_bar"
             val TABLE_NAME_MAISON = "restos_maison"
-            val TABLE_SORT = "sort"
+            val TABLE_SETTINGS = "sort"
             val COLUMN_ID = "_id"
             val COLUMN_NAME = "title"
             val COLUMN_TYPE = "type"
@@ -182,5 +203,6 @@ class MyDbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             val COLUMN_VETTO = "vetto"
             val COLUMN_POS = "pos"
             val VAL_SORT = "val_sort"
+            val VAL_SCALE = "val_scale"
         }
 }
