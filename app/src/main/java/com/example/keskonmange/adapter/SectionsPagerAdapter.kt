@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.keskonmange.fragment.MaisonFragment
 import com.example.keskonmange.fragment.BarFragment
-import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
