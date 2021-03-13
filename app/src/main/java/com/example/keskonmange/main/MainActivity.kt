@@ -2,9 +2,7 @@ package com.example.keskonmange.main
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.keskonmange.R
 import com.example.keskonmange.fragment.BarFragment
@@ -18,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), BarFragment.OnListFragmentInteractionListener, MaisonFragment.OnListFragmentInteractionListener, NewRestoDialogFragment.OnFragmentInteractionListener, NewRestoDialogFragment.DialogListener {
 
-    private val TAB_TITLES = listOf(
+    private val tabTitles = listOf(
         R.string.tab_text_2,
         R.string.tab_text_1
     )
@@ -30,10 +28,11 @@ class MainActivity : AppCompatActivity(), BarFragment.OnListFragmentInteractionL
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
         val viewPager: ViewPager2 = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
+        viewPager.isUserInputEnabled = false
         val tabs: TabLayout = findViewById(R.id.tabs)
 
         TabLayoutMediator(tabs, viewPager) { tab, position ->
-            tab.text = getString(TAB_TITLES[position])
+            tab.text = getString(tabTitles[position])
         }.attach()
     }
 
