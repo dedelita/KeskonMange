@@ -26,22 +26,21 @@ import kotlinx.android.synthetic.main.fragment_resto_list.view.*
  * specified [BarFragment.OnListFragmentInteractionListener].
  */
 class BarRecyclerViewAdapter(
-    private var restos: ArrayList<Resto>, private var sort: String, private var scale: String, context: Context,
+    private var restos: ArrayList<Resto>, private var sort: String, context: Context,
     private val mListener: BarFragment.OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<BarRecyclerViewAdapter.RestoViewHolder>() {
 
     private var dbHelper: MyDbHelper? = null
-    private val mOnClickListener: View.OnClickListener
+    private val mOnClickListener: View.OnClickListener = View.OnClickListener { v ->
+        val item = v.tag as Resto
+        // Notify the active callbacks interface (the activity, if the fragment is attached to
+        // one) that an item has been selected.
+        mListener?.onListFragmentInteraction(item)
+    }
     private var rv: RecyclerView = RecyclerView(context)
     private var layoutRes = R.layout.fragment_resto
 
     init {
-        mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as Resto
-            // Notify the active callbacks interface (the activity, if the fragment is attached to
-            // one) that an item has been selected.
-            mListener?.onListFragmentInteraction(item)
-        }
         dbHelper = MyDbHelper(context, null)
     }
 
@@ -50,8 +49,9 @@ class BarRecyclerViewAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestoViewHolder {
-        if(scale == "comfort")
+        if(dbHelper!!.getScale() == "comfort") {
             layoutRes = R.layout.fragment_resto_comfort
+        }
         val view = LayoutInflater.from(parent.context)
             .inflate(layoutRes, parent, false)
         rv = parent.rv_resto
@@ -101,10 +101,11 @@ class BarRecyclerViewAdapter(
         }
 
         holder.restoVetto.setOnClickListener {
-            if (!holder.vetto!!) {
+            if (holder.restoVotes.visibility == View.VISIBLE) {
                 dbHelper!!.updateVotesRestoBar(resto.name!!, resto.type!!, -1)
                 dbHelper!!.updateVettoRestoBar(resto.name!!, resto.type!!, true)
                 resto.vetto = true
+
                 holder.initVetto()
             } else {
                 if (resto.votes == -1) {
@@ -167,14 +168,14 @@ class BarRecyclerViewAdapter(
     override fun getItemCount(): Int = restos.size
 
     inner class RestoViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val restoName: TextView = mView.resto_name
-        val restoType: TextView = mView.resto_type
+        private val restoName: TextView = mView.resto_name
+        private val restoType: TextView = mView.resto_type
         val restoVotes: EditText = mView.np_nb
         val npMoins: ImageButton = mView.np_moins
         val npPlus: ImageButton = mView.np_plus
         val restoVetto: ImageButton = mView.resto_non
         val restoDelete: ImageButton = mView.resto_delete
-        var vetto: Boolean? = false
+        private var vetto: Boolean? = false
 
         fun initVetto() {
             vetto = true

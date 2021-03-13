@@ -27,22 +27,21 @@ import kotlinx.android.synthetic.main.fragment_resto_list.view.*
  * specified [MaisonFragment.OnListFragmentInteractionListener].
  */
 class MaisonRecyclerViewAdapter(
-    private var restos: ArrayList<Resto>, private var sort: String, private var scale: String, context: Context,
+    private var restos: ArrayList<Resto>, private var sort: String, context: Context,
     private val mListener: MaisonFragment.OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<MaisonRecyclerViewAdapter.ViewHolder>() {
 
     private var dbHelper: MyDbHelper? = null
-    private val mOnClickListener: View.OnClickListener
+    private val mOnClickListener: View.OnClickListener = View.OnClickListener { v ->
+        val item = v.tag as Resto
+        // Notify the active callbacks interface (the activity, if the fragment is attached to
+        // one) that an item has been selected.
+        mListener?.onListFragmentInteraction(item)
+    }
     private var rv: RecyclerView = RecyclerView(context)
     private var layoutRes = R.layout.fragment_resto
 
     init {
-        mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as Resto
-            // Notify the active callbacks interface (the activity, if the fragment is attached to
-            // one) that an item has been selected.
-            mListener?.onListFragmentInteraction(item)
-        }
         dbHelper = MyDbHelper(context, null)
     }
 
@@ -51,8 +50,9 @@ class MaisonRecyclerViewAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        if(scale == "comfort")
+        if(dbHelper!!.getScale() == "comfort") {
             layoutRes = R.layout.fragment_resto_comfort
+        }
         val view = LayoutInflater.from(parent.context)
             .inflate(layoutRes, parent, false)
         rv = parent.rv_resto
@@ -170,14 +170,14 @@ class MaisonRecyclerViewAdapter(
     override fun getItemCount(): Int = restos.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val restoName: TextView = mView.resto_name
-        val restoType: TextView = mView.resto_type
+        private val restoName: TextView = mView.resto_name
+        private val restoType: TextView = mView.resto_type
         val restoVotes: EditText = mView.np_nb
         val npMoins: ImageButton = mView.np_moins
         val npPlus: ImageButton = mView.np_plus
         val restoVetto: ImageButton = mView.resto_non
         val restoDelete: ImageButton = mView.resto_delete
-        var vetto: Boolean? = false
+        private var vetto: Boolean? = false
 
         fun initVetto() {
             vetto = true

@@ -52,15 +52,15 @@ class BarFragment : Fragment() {
         when(item.itemId) {
             R.id.scale_comfort -> rescale("comfort")
             R.id.scale_compact -> rescale("compact")
-            R.id.action_reset -> reset_votes()
+            R.id.action_reset -> resetVotes()
             R.id.sort_asc -> rv_resto.adapter =
-                BarRecyclerViewAdapter(getRestos("asc"), "asc", scale, activity!!, listener)
+                BarRecyclerViewAdapter(getRestos("asc"), "asc", activity!!, listener)
             R.id.sort_desc -> rv_resto.adapter =
-                BarRecyclerViewAdapter(getRestos("desc"), "desc", scale, activity!!, listener)
+                BarRecyclerViewAdapter(getRestos("desc"), "desc", activity!!, listener)
             R.id.sort_type -> rv_resto.adapter =
-                BarRecyclerViewAdapter(getRestos("type"), "type", scale, activity!!, listener)
+                BarRecyclerViewAdapter(getRestos("type"), "type", activity!!, listener)
             R.id.sort_votes -> rv_resto.adapter =
-                BarRecyclerViewAdapter(getRestos("votes"), "votes", scale, activity!!, listener)
+                BarRecyclerViewAdapter(getRestos("votes"), "votes", activity!!, listener)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -69,7 +69,7 @@ class BarFragment : Fragment() {
         dbHelper = MyDbHelper(this.context!!, null)
         sort = dbHelper!!.getSort()
         scale = dbHelper!!.getScale()
-        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
+        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
 
         val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback((ItemTouchHelper.UP or ItemTouchHelper.DOWN), 0) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
@@ -90,7 +90,7 @@ class BarFragment : Fragment() {
         touchHelper.attachToRecyclerView(rv_resto)
 
 
-        fab_add.setOnClickListener { _ ->
+        fab_add.setOnClickListener {
             val dialogFragment = NewRestoDialogFragment()
             dialogFragment.setOu("Bar")
             val ft = activity!!.supportFragmentManager.beginTransaction()
@@ -124,7 +124,7 @@ class BarFragment : Fragment() {
                 val builder = AlertDialog.Builder(activity!!)
                 builder.setTitle("On mange")
                 builder.setMessage(resultat)
-                builder.setPositiveButton("OK") { _, _ -> reset_votes() }
+                builder.setPositiveButton("OK") { _, _ -> resetVotes() }
                 builder.setNegativeButton("Encore") { _, _ -> fab_resto_choix.performClick() }
                 builder.show()
             }
@@ -139,7 +139,7 @@ class BarFragment : Fragment() {
                     types.remove(chippy.text.toString())
 
                 rv_resto.adapter =
-                    BarRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
+                    BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
             }
         }
     }
@@ -158,7 +158,7 @@ class BarFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == 1) {
-            rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
+            rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
         }
     }
     /**
@@ -181,16 +181,16 @@ class BarFragment : Fragment() {
             this.scale = scale
             dbHelper!!.updateScale(scale)
         }
-        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
+        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
     }
 
-    private fun reset_votes() {
+    private fun resetVotes() {
         val restos = getRestos(sort)
         for(r in restos) {
             dbHelper!!.updateVotesRestoBar(r.name!!, r.type!!, 0)
             dbHelper!!.updateVettoRestoBar(r.name!!, r.type!!, false)
         }
-        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, scale, activity!!, listener)
+        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
     }
 
     private fun getResto(cursor: Cursor): Resto {

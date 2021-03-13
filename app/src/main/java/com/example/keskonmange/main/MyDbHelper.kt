@@ -29,10 +29,11 @@ class MyDbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             CREATE_TABLE = ("CREATE TABLE $TABLE_SETTINGS " +
                     "($VAL_SORT TEXT, " +
                     "$VAL_SCALE TEXT)")
+
             db.execSQL(CREATE_TABLE)
             val values = ContentValues()
             values.put(VAL_SORT, "")
-            values.put(VAL_SCALE, "comfort")
+            values.put(VAL_SCALE, "compact")
             db.insert(TABLE_SETTINGS, null, values)
         }
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
