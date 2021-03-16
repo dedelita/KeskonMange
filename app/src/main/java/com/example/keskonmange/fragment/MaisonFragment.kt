@@ -24,6 +24,7 @@ class MaisonFragment : Fragment() {
     private var types = arrayListOf("Resto", "Livraison", "A emporter", "Plat")
     private var choix = arrayListOf<Resto>()
     private var sort: String = ""
+    private var scale: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -34,6 +35,11 @@ class MaisonFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onResume() {
+        rescale(dbHelper!!.getScale())
+        super.onResume()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -61,6 +67,7 @@ class MaisonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         dbHelper = MyDbHelper(this.context!!, null)
         sort = dbHelper!!.getSort()
+        scale = dbHelper!!.getScale()
         cg_type.chipPlat.visibility = View.VISIBLE
 
         rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
@@ -90,16 +97,16 @@ class MaisonFragment : Fragment() {
             }
             if (choix.isEmpty()) {
                 val builder = AlertDialog.Builder(activity!!)
-                builder.setTitle("Désolé")
-                builder.setMessage("Pas de choix disponible")
+                builder.setTitle(getString(R.string.dsl))
+                builder.setMessage(getString(R.string.pasDispo))
                 builder.show()
             } else {
                 val resultat = choix[((0 until choix.size).random())].name
                 val builder = AlertDialog.Builder(activity!!)
-                builder.setTitle("On mange")
+                builder.setTitle(getString(R.string.onMange))
                 builder.setMessage(resultat)
-                builder.setPositiveButton("OK") { _, _ -> resetVotes() }
-                builder.setNegativeButton("Encore") { _, _ -> fab_resto_choix.performClick() }
+                builder.setPositiveButton(getString(R.string.ok)) { _, _ -> resetVotes() }
+                builder.setNegativeButton(getString(R.string.encore)) { _, _ -> fab_resto_choix.performClick() }
                 builder.show()
             }
         }
@@ -156,8 +163,10 @@ class MaisonFragment : Fragment() {
     }
 
     private fun rescale(scale: String) {
-        dbHelper!!.updateScale(scale)
-        rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
+        if(scale != this.scale) {
+            dbHelper!!.updateScale(scale)
+            rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
+        }
     }
 
     private fun resetVotes() {

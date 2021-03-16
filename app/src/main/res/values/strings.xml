@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">KeskonMange</string>
     <string name="tab_text_1">Au bar</string>
     <string name="tab_text_2">A la maison</string>
@@ -21,4 +21,9 @@
     <string name="rescale">Format</string>
     <string name="scale_comfort">Confortable</string>
     <string name="scale_compact">Compact</string>
+    <string name="dsl">Désolé</string>
+    <string name="pasDispo">Pas de choix disponible</string>
+    <string name="onMange">On mange</string>
+    <string name="ok">OK</string>
+    <string name="encore">Encore</string>
 </resources>

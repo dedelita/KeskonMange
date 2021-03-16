@@ -43,6 +43,13 @@ class BarFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onResume() {
+       // val dbScale = dbHelper!!.getScale()
+        //if(scale != dbScale)
+            rescale(dbHelper!!.getScale())
+        super.onResume()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_activity_main, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -116,16 +123,16 @@ class BarFragment : Fragment() {
             }
             if (choix.isEmpty()) {
                 val builder = AlertDialog.Builder(activity!!)
-                builder.setTitle("Désolé")
-                builder.setMessage("Pas de choix disponible")
+                builder.setTitle(getString(R.string.dsl))
+                builder.setMessage(getString(R.string.pasDispo))
                 builder.show()
             } else {
                 val resultat = choix[((0 until choix.size).random())].name
                 val builder = AlertDialog.Builder(activity!!)
-                builder.setTitle("On mange")
+                builder.setTitle(getString(R.string.onMange))
                 builder.setMessage(resultat)
-                builder.setPositiveButton("OK") { _, _ -> resetVotes() }
-                builder.setNegativeButton("Encore") { _, _ -> fab_resto_choix.performClick() }
+                builder.setPositiveButton(getString(R.string.ok)) { _, _ -> resetVotes() }
+                builder.setNegativeButton(getString(R.string.encore)) { _, _ -> fab_resto_choix.performClick() }
                 builder.show()
             }
         }
@@ -178,10 +185,9 @@ class BarFragment : Fragment() {
 
     private fun rescale(scale: String) {
         if(scale != this.scale) {
-            this.scale = scale
             dbHelper!!.updateScale(scale)
+            rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
         }
-        rv_resto.adapter = BarRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
     }
 
     private fun resetVotes() {
