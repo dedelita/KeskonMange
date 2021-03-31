@@ -26,4 +26,6 @@
     <string name="onMange">On mange</string>
     <string name="ok">OK</string>
     <string name="encore">Encore</string>
+    <string name="newChoice">Entrer le nouveau choix</string>
+    <string name="add">Ajouter</string>
 </resources>

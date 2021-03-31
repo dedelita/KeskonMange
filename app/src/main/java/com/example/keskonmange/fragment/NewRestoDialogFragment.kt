@@ -24,8 +24,6 @@ import kotlinx.android.synthetic.main.fragment_new_resto.view.*
  * Activities that contain this fragment must implement the
  * [NewRestoDialogFragment.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [NewRestoDialogFragment.newInstance] factory method to
- * create an instance of this fragment.
  */
 class NewRestoDialogFragment : DialogFragment() {
     private var dbHelper: MyDbHelper? = null
@@ -43,42 +41,49 @@ class NewRestoDialogFragment : DialogFragment() {
         dbHelper =
             MyDbHelper(activity!!.baseContext, null)
         val view = inflater.inflate(R.layout.fragment_new_resto, container, false)
-        val list_ou = arrayListOf("Bar", "Maison")
-        val list_type = arrayListOf("Resto", "Livraison", "A emporter")
+        val listOu = arrayListOf("Bar", "Maison")
+        val listType = arrayListOf("Resto", "Livraison", "A emporter")
 
-        view.spinner_ou.adapter = ArrayAdapter(activity!!.baseContext, R.layout.spinner_item, list_ou)
-        view.spinner_type.adapter = ArrayAdapter(activity!!.baseContext, R.layout.spinner_item, list_type)
+        view.spinner_ou.adapter =
+            ArrayAdapter(activity!!.baseContext, R.layout.spinner_item, listOu)
+        view.spinner_type.adapter =
+            ArrayAdapter(activity!!.baseContext, R.layout.spinner_item, listType)
 
-
-        if(ou.equals("Bar"))
+        if (ou == "Bar")
             view.spinner_ou.setSelection(0)
         else
             view.spinner_ou.setSelection(1)
 
-        view.spinner_ou.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+        view.spinner_ou.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if(spinner_ou.selectedItem.equals("Maison"))
-                    list_type.add("Plat")
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (spinner_ou.selectedItem == "Maison")
+                    listType.add("Plat")
                 else
-                    list_type.remove("Plat")
+                    listType.remove("Plat")
             }
 
         }
         view.buttonAjout.setOnClickListener {
-            val resto = Resto()
-            resto.name = resto_name.text.trim().toString()
-            resto.type = spinner_type.selectedItem.toString()
-            val success = if(spinner_ou.selectedItem == "Bar") {
-                dbHelper!!.addRestoBar(resto)
-            } else
-                dbHelper!!.addRestoMaison(resto)
+            if (resto_name.text.isNotEmpty()) {
+                val resto = Resto()
+                resto.name = resto_name.text.trim().toString()
+                resto.type = spinner_type.selectedItem.toString()
+                val success = if (spinner_ou.selectedItem == "Bar") {
+                    dbHelper!!.addRestoBar(resto)
+                } else
+                    dbHelper!!.addRestoMaison(resto)
 
-
-            if(success) {
-                targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, null)
-                dismiss()
+                if (success) {
+                    targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, null)
+                    dismiss()
+                }
             }
         }
         return view
@@ -114,7 +119,7 @@ class NewRestoDialogFragment : DialogFragment() {
     }
 
     interface DialogListener {
-        fun onFinishEditDialog(inputText:String)
+        fun onFinishEditDialog(inputText: String)
     }
 
 }

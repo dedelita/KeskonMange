@@ -44,18 +44,21 @@ class BarFragment : Fragment() {
     }
 
     override fun onResume() {
-       // val dbScale = dbHelper!!.getScale()
-        //if(scale != dbScale)
-            rescale(dbHelper!!.getScale())
+        rescale(dbHelper!!.getScale())
         super.onResume()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_activity_main, menu)
+        when (dbHelper!!.getScale()) {
+            "comfort" -> menu.findItem(R.id.scale_comfort).isChecked = true
+            "compact" -> menu.findItem(R.id.scale_compact).isChecked = true
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        item.isChecked = true
         when(item.itemId) {
             R.id.scale_comfort -> rescale("comfort")
             R.id.scale_compact -> rescale("compact")

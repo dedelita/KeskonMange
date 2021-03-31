@@ -2,40 +2,45 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_scale"
+    <item
+        android:id="@+id/action_scale"
         android:icon="@drawable/ic_format_line_spacing_white_24dp"
         android:title="@string/rescale"
         app:showAsAction="ifRoom">
         <menu>
-            <item
-                android:id="@+id/scale_comfort"
-                android:title="@string/scale_comfort"/>
-            <item
-                android:id="@+id/scale_compact"
-                android:title="@string/scale_compact"/>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/scale_comfort"
+                    android:title="@string/scale_comfort" />
+                <item
+                    android:id="@+id/scale_compact"
+                    android:title="@string/scale_compact" />
+            </group>
         </menu>
     </item>
-    <item android:id="@+id/action_sort"
+    <item
+        android:id="@+id/action_sort"
         android:icon="@drawable/ic_sort_white_24dp"
         android:title="@string/sort"
         app:showAsAction="ifRoom">
         <menu>
             <item
                 android:id="@+id/sort_asc"
-                android:title="@string/sort_asc"/>
+                android:title="@string/sort_asc" />
             <item
                 android:id="@+id/sort_desc"
-                android:title="@string/sort_desc"/>
+                android:title="@string/sort_desc" />
             <item
                 android:id="@+id/sort_type"
-                android:title="@string/sort_type"/>
+                android:title="@string/sort_type" />
             <item
                 android:id="@+id/sort_votes"
-                android:title="@string/sort_votes"/>
+                android:title="@string/sort_votes" />
         </menu>
     </item>
-    <item android:id="@+id/action_reset"
+    <item
+        android:id="@+id/action_reset"
         android:icon="@drawable/ic_refresh_white_24dp"
         android:title="@string/reset"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 </menu>

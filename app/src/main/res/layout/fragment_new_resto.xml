@@ -2,6 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -20,10 +21,12 @@
         android:id="@+id/resto_name"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:hint="Entrer le nouveau choix"
+        android:hint="@string/newChoice"
         app:layout_constraintBottom_toTopOf="@+id/spinner_type"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_ou" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_ou"
+        android:importantForAutofill="no"
+        tools:ignore="TextFields" />
 
     <Spinner
         android:id="@+id/spinner_type"
@@ -39,7 +42,7 @@
         android:id="@+id/buttonAjout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ajouter" />
+        android:text="@string/add" />
 
 
 </LinearLayout>
