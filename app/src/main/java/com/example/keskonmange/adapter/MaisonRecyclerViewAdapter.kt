@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.text.Editable
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -76,7 +75,6 @@ class MaisonRecyclerViewAdapter(
         }
 
         holder.npMoins.setOnClickListener {
-            Log.d("moins", holder.toString())
             var nb = resto.votes!!
             if (nb > 0) {
                 nb -= 1
@@ -90,7 +88,6 @@ class MaisonRecyclerViewAdapter(
         }
 
         holder.npPlus.setOnClickListener {
-            Log.d("plus", holder.toString())
             var nb = Integer.parseInt(holder.restoVotes.text.toString())
             nb += 1
             dbHelper!!.updateVotesRestoMaison(resto.name!!, resto.type!!, nb)
@@ -103,14 +100,12 @@ class MaisonRecyclerViewAdapter(
 
         holder.restoVetto.setOnClickListener {
             if (holder.restoVotes.visibility == View.VISIBLE) {
-                Log.d("vettoYes", holder.toString())
                 dbHelper!!.updateVotesRestoMaison(resto.name!!, resto.type!!, -1)
                 dbHelper!!.updateVettoRestoMaison(resto.name!!, resto.type!!, true)
                 resto.vetto = true
 
                 holder.initVetto()
             } else {
-                Log.d("vettoNo", holder.toString())
                 if (resto.votes == -1) {
                     holder.restoVotes.text = Editable.Factory.getInstance().newEditable("0")
                     resto.votes = 0
@@ -196,7 +191,6 @@ class MaisonRecyclerViewAdapter(
         }
 
         fun bind(resto: Resto) {
-            Log.d("restos", resto.toString())
             restoName.text = resto.name
             restoType.text = resto.type
             restoVotes.text = Editable.Factory.getInstance().newEditable(resto.votes.toString())

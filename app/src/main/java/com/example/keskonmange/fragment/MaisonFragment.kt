@@ -38,7 +38,9 @@ class MaisonFragment : Fragment() {
     }
 
     override fun onResume() {
-        rescale(dbHelper!!.getScale())
+        val newScale = dbHelper!!.getScale()
+        if(scale != newScale)
+            rescale(newScale)
         super.onResume()
     }
 
@@ -168,10 +170,10 @@ class MaisonFragment : Fragment() {
     }
 
     private fun rescale(scale: String) {
-        if(scale != this.scale) {
-            dbHelper!!.updateScale(scale)
-            rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
-        }
+        this.scale = scale
+        dbHelper!!.updateScale(scale)
+        rv_resto.adapter = MaisonRecyclerViewAdapter(getRestos(sort), sort, activity!!, listener)
+
     }
 
     private fun resetVotes() {
